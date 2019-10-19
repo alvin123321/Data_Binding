@@ -1,4 +1,5 @@
 <div class="container">
+  <!-- Data output from app-cockpit and pusing new element into the array -->
   <app-cockpit
     (serverCreated)="onServerAdded($event)"
     (bluePrintCreated)="onBlueprintAdded($event)"
@@ -6,6 +7,7 @@
   <hr />
   <div class="row">
     <div class="col-xs-12">
+      <!-- Inputing data into app-server-element -->
       <app-server-element
         *ngFor="let serverElement of serverElements"
         [element]="serverElement"
