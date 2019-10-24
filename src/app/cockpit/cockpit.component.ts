@@ -1,4 +1,11 @@
-import { Component, OnInit, EventEmitter, Output } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  EventEmitter,
+  Output,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 
 @Component({
   selector: 'app-cockpit',
@@ -16,18 +23,20 @@ export class CockpitComponent implements OnInit {
     serverContent: string;
   }>();
 
-  newServerName = '';
-  newServerContent = '';
+  @Output() reset = new EventEmitter<{}>();
+
+  @ViewChild('serverContentInput', { static: true })
+  serverContentInput: ElementRef;
 
   constructor() {}
 
   ngOnInit() {}
 
-  onAddServer() {
-    if (this.newServerName !== '' && this.newServerContent !== '') {
+  onAddServer(nameInput: HTMLInputElement, contentInput: HTMLInputElement) {
+    if (nameInput.value !== '' && contentInput.value !== '') {
       this.serverCreated.emit({
-        serverName: this.newServerName,
-        serverContent: this.newServerContent
+        serverName: nameInput.value,
+        serverContent: this.serverContentInput.nativeElement.value
       });
     } else {
       alert('Invalid input');
@@ -36,21 +45,27 @@ export class CockpitComponent implements OnInit {
     this.clearInput();
   }
 
-  onAddBlueprint() {
-    if (this.newServerName !== '' && this.newServerContent !== '') {
+  onAddBlueprint(nameInput: HTMLInputElement, contentInput: HTMLInputElement) {
+    if (nameInput.value !== '' && contentInput.value !== '') {
       this.bluePrintCreated.emit({
-        serverName: this.newServerName,
-        serverContent: this.newServerContent
+        serverName: nameInput.value,
+        serverContent: this.serverContentInput.nativeElement.value
       });
     } else {
       alert('Invalid input');
     }
 
     this.clearInput();
+  }
+
+  resetClick() {
+    this.reset.emit();
   }
 
   clearInput() {
-    this.newServerName = '';
-    this.newServerContent = '';
+    const elements = document.getElementsByTagName('input');
+    for (let i = 0; i < elements.length; i++) {
+      elements[i].value = '';
+    }
   }
 }
